@@ -1,0 +1,939 @@
+Binary files tencirchem_v2024.10/applications/__pycache__/__init__.cpython-39.pyc and tencirchem_mod/applications/__pycache__/__init__.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/applications/__pycache__/vbe_lib.cpython-39.pyc and tencirchem_mod/applications/__pycache__/vbe_lib.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/dynamic/__pycache__/__init__.cpython-39.pyc and tencirchem_mod/dynamic/__pycache__/__init__.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/dynamic/__pycache__/time_derivative.cpython-39.pyc and tencirchem_mod/dynamic/__pycache__/time_derivative.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/dynamic/__pycache__/time_evolution.cpython-39.pyc and tencirchem_mod/dynamic/__pycache__/time_evolution.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/dynamic/__pycache__/transform.cpython-39.pyc and tencirchem_mod/dynamic/__pycache__/transform.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/dynamic/model/__pycache__/__init__.cpython-39.pyc and tencirchem_mod/dynamic/model/__pycache__/__init__.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/dynamic/model/__pycache__/pyrazine.cpython-39.pyc and tencirchem_mod/dynamic/model/__pycache__/pyrazine.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/dynamic/model/__pycache__/sbm.cpython-39.pyc and tencirchem_mod/dynamic/model/__pycache__/sbm.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/__init__.cpython-39.pyc and tencirchem_mod/static/__pycache__/__init__.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/ci_utils.cpython-39.pyc and tencirchem_mod/static/__pycache__/ci_utils.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/engine_hea.cpython-39.pyc and tencirchem_mod/static/__pycache__/engine_hea.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/engine_ucc.cpython-39.pyc and tencirchem_mod/static/__pycache__/engine_ucc.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/evolve_civector.cpython-39.pyc and tencirchem_mod/static/__pycache__/evolve_civector.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/evolve_pyscf.cpython-39.pyc and tencirchem_mod/static/__pycache__/evolve_pyscf.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/evolve_statevector.cpython-39.pyc and tencirchem_mod/static/__pycache__/evolve_statevector.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/evolve_tensornetwork.cpython-39.pyc and tencirchem_mod/static/__pycache__/evolve_tensornetwork.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/hamiltonian.cpython-39.pyc and tencirchem_mod/static/__pycache__/hamiltonian.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/hea.cpython-39.pyc and tencirchem_mod/static/__pycache__/hea.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/kupccgsd.cpython-39.pyc and tencirchem_mod/static/__pycache__/kupccgsd.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/puccd.cpython-39.pyc and tencirchem_mod/static/__pycache__/puccd.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/ucc.cpython-39.pyc and tencirchem_mod/static/__pycache__/ucc.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/static/__pycache__/uccsd.cpython-39.pyc and tencirchem_mod/static/__pycache__/uccsd.cpython-39.pyc differ
+diff -ruN tencirchem_v2024.10/static/engine_hea.py tencirchem_mod/static/engine_hea.py
+--- tencirchem_v2024.10/static/engine_hea.py	2024-11-29 12:16:10.119298100 +0800
++++ tencirchem_mod/static/engine_hea.py	2025-08-13 13:37:32.799752900 +0800
+@@ -11,7 +11,7 @@
+ from tensorcircuit import Circuit, DMCircuit
+ from tensorcircuit.noisemodel import circuit_with_noise
+ from tensorcircuit.experimental import parameter_shift_grad
+-from tensorcircuit.cloud.wrapper import batch_expectation_ps
++from tensorcircuit.cloud.wrapper import batch_expectation_ps, batch_expectation_ps_test_rem
+ 
+ from tencirchem.utils.backend import jit
+ 
+@@ -19,7 +19,7 @@
+ class QpuConf:
+     def __init__(self, device=None, provider=None, initial_mapping=None):
+         if device is None:
+-            device = "tianji_s2"
++            device = "tencent::simulator:tc"
+         self.device = device
+         self.privider = provider
+         self.initial_mapping = initial_mapping
+@@ -42,7 +42,9 @@
+ @partial(jit, static_argnums=[2])
+ def get_energy_tensornetwork(params, h_array, get_circuit):
+     s = get_statevector(params, get_circuit)
+-    return (s.conj() @ (h_array @ s)).real
++    e = (s.conj() @ (h_array @ s)).real
++    # print(e)
++    return e
+ 
+ 
+ @partial(jit, static_argnums=[2, 3])
+@@ -82,7 +84,7 @@
+     return sample_expectation_pauli(c, paulis, coeffs, shots, noise_conf)
+ 
+ 
+-def get_energy_qpu(params, paulis, coeffs, get_circuit, qpu_conf: QpuConf, shots: int):
++def get_energy_qpu(params, paulis, coeffs, get_circuit, qpu_conf: QpuConf, shots: int, label: str = None, remarks: str = None, save: bool = False):
+     c: Circuit = get_circuit(params)
+     pss = []
+     symbol_mapping = {"X": 1, "Y": 2, "Z": 3}
+@@ -99,13 +101,30 @@
+     coeffs_non_identity = [coeffs[i] for i in range(len(coeffs)) if i not in ps_identity_idx]
+     assert len(pss) == len(coeffs_non_identity)
+     es = []
+-    for _ in range((shots - 1) // 8192 + 1):
+-        e = batch_expectation_ps(c, pss, device=qpu_conf.device, ws=coeffs_non_identity, shots=8192)
+-        es.append(e)
+-    print(paulis)
+-    print(coeffs)
+-    print(es)
+-    return np.mean(es) + sum([coeffs[i] for i in ps_identity_idx])
++    e = batch_expectation_ps(c, pss, device=qpu_conf.device, ws=coeffs_non_identity, shots=shots, batch_label=label, remarks=remarks, save=save)
++    # e = batch_expectation_ps_test_rem(c, pss, device=qpu_conf.device, ws=coeffs_non_identity, shots=shots, batch_label=label, remarks=remarks, save=save)
++    es.append(e)
++    # if shots > 8192:
++    #     for _ in range((shots - 1) // 8192 + 1):
++    #         e = batch_expectation_ps(c, pss, device=qpu_conf.device, ws=coeffs_non_identity, shots=8192, batch_label=label, remarks=remarks, save=save)
++    #         es.append(e)
++    # else:
++    #     e = batch_expectation_ps(c, pss, device=qpu_conf.device, ws=coeffs_non_identity, shots=shots, batch_label=label, remarks=remarks, save=save)
++    #     es.append(e)
++    # print(paulis)
++    # print(coeffs)
++    fix_e = sum([coeffs[i] for i in ps_identity_idx])
++    if isinstance(e, tuple):
++        e_raw = e[0] + fix_e
++        e_rem_diag = e[1] + fix_e
++        e_rem_prob = e[2] + fix_e
++        print("raw", e[0])
++        print("dia", e[1])
++        print("pro", e[2])
++        return e_raw, e_rem_diag, e_rem_prob
++    else:
++        print(es)
++        return np.mean(es) + fix_e
+ 
+ 
+ def _get_energy_and_grad(partial_get_energy, params, grad):
+@@ -158,12 +177,13 @@
+     return _get_energy_and_grad(partial_get_energy, params, grad)
+ 
+ 
+-def get_energy_and_grad_qpu(params, paulis, coeffs, get_circuit, shots: int, grad):
++def get_energy_and_grad_qpu(params, paulis, coeffs, get_circuit, shots: int, grad, qpu_conf=None):
+     partial_get_energy = partial(
+         get_energy_qpu,
+         paulis=paulis,
+         coeffs=coeffs,
+         get_circuit=get_circuit,
+         shots=shots,
++        qpu_conf=qpu_conf,
+     )
+     return _get_energy_and_grad(partial_get_energy, params, grad)
+diff -ruN tencirchem_v2024.10/static/hea.py tencirchem_mod/static/hea.py
+--- tencirchem_v2024.10/static/hea.py	2024-11-29 12:16:10.135317800 +0800
++++ tencirchem_mod/static/hea.py	2025-08-13 13:37:32.884295100 +0800
+@@ -54,6 +54,10 @@
+ 
+ Tensor = Any
+ 
++def reverse_idx(idx, n_modes):
++    return n_modes-1-idx
++
++
+ 
+ def get_noise_conf(probability=0.02):
+     noise_conf = NoiseConf()
+@@ -149,7 +153,7 @@
+     return res
+ 
+ 
+-def fop_to_qop(fop: FermionOperator, mapping: str, n_sorb: int, n_elec: int) -> QubitOperator:
++def fop_to_qop(fop: FermionOperator, mapping: str, n_sorb: int, n_elec: Union[int, Tuple[int, int]]) -> QubitOperator:
+     if mapping == "parity":
+         qop = parity(fop, n_sorb, n_elec)
+     elif mapping in ["jordan-wigner", "jordan_wigner"]:
+@@ -191,6 +195,33 @@
+         c.barrier_instruction(*range(n_qubits))
+     return c
+ 
++def circuit_open_old(params):
++    c = Circuit(4)
++    c.ry(0, theta=params[0])
++    c.cry(0, 1, theta=params[1])
++    c.cnot(1, 2)
++    c.x(1)
++    c.cnot(2,3)
++    return c
++
++def circuit_open(params):
++    c = Circuit(4)
++    c.ry(0, theta=params[0])
++    c.x(1)
++    c.ry(3, theta=params[1])
++    c.cry(0, 1, theta=params[2])
++    c.cry(3, 2, theta=params[3])
++    return c
++
++def circuit_close(params):
++    c = tc.Circuit(4)
++    c.x(1)
++    c.cry(1, 0, theta=params[0])
++    c.ry(0, theta=params[1])
++    c.cnot(0, 2)
++    c.cnot(1, 3)
++    return c
++
+ 
+ class HEA:
+     """
+@@ -313,6 +344,54 @@
+         instance = cls.from_integral(int1e, int2e, n_elec, e_core, mapping, get_circuit, init_guess, **kwargs)
+         instance.mapping = mapping
+         return instance
++    
++    @classmethod
++    def circuit_new_design(
++        cls,
++        int1e: np.ndarray,
++        int2e: np.ndarray,
++        n_elec: Union[int, Tuple[int, int]],
++        e_core: float,
++        mapping: str = "parity",
++        **kwargs,
++    ):
++
++        init_guess = np.random.rand(4)
++
++        def get_circuit(params):
++            if isinstance(n_elec, tuple):
++                if n_elec[0] == n_elec[1]:
++                    return circuit_close(params)
++                else:
++                    return circuit_open(params)
++            else:
++                if n_elec % 2 != 0 :
++                    return circuit_open(params)
++                else:
++                    return circuit_close(params)
++
++        instance = cls.from_integral(int1e, 
++                                     int2e, 
++                                     n_elec, 
++                                     e_core, 
++                                     mapping, 
++                                     get_circuit, 
++                                     init_guess, 
++                                     engine=kwargs['engine'],
++                                     engine_conf=kwargs['engine_conf']
++                                     )
++        instance.mapping = mapping
++        if 'engine' in kwargs:
++            assert instance.engine == kwargs['engine']
++            # assert instance.engine_conf == kwargs['engine_conf']
++        if instance.engine == 'qpu':
++            instance.soap = True
++            instance.grad = "free"
++            instance.shots = 2048
++            instance.task = kwargs['label']
++            instance.group = instance.task + "-VQE"
++            instance.save = kwargs['save']
++        return instance
+ 
+     @classmethod
+     def from_integral(
+@@ -394,6 +473,8 @@
+             Accepts the ``HEA`` instance and modifies it inplace before :func:`kernel` is called.
+         opt_engine: str
+             The engine to use when performing the circuit parameter optimization.
++        label: str
++            A string indicating what mission is undergoing, mainly for saving pickle files.
+         kwargs
+             Other arguments to be passed to the :func:`__init__` function such as ``engine``.
+ 
+@@ -422,11 +503,16 @@
+                 self.instance: HEA = None
+                 self.config_function = config_function
+                 self.instance_kwargs = kwargs.copy()
+-                if "n_layers" not in self.instance_kwargs:
+-                    self.instance_kwargs["n_layers"] = 1
++                # if "n_layers" not in self.instance_kwargs:
++                #     self.instance_kwargs["n_layers"] = 1
+ 
+             def kernel(self, h1, h2, norb, nelec, ci0=None, ecore=0, **kwargs):
+-                self.instance = cls.ry(h1, h2, nelec, e_core=ecore, **self.instance_kwargs)
++                print("\nRun on TenCirChem")
++                # self.instance = cls.ry(h1, h2, nelec, e_core=ecore, **self.instance_kwargs)
++                self.instance = cls.circuit_new_design(h1, h2, nelec, e_core=ecore, **self.instance_kwargs)
++                
++                print(f"number of qubits: {self.instance.n_qubits}")
++                print(f"number of params: {self.instance.n_params}")
+                 if self.config_function is not None:
+                     self.config_function(self.instance)
+                 if opt_engine is None:
+@@ -442,11 +528,18 @@
+             def make_rdm1(self, params, norb, nelec):
+                 rdm1 = self.instance.make_rdm1(params)
+                 return rdm1
++            
++            def make_rdm1s(self, params, norb, nelec):
++                return self.instance.make_rdm1s(params)
+ 
+             def make_rdm12(self, params, norb, nelec):
+                 rdm1 = self.instance.make_rdm1(params)
+                 rdm2 = self.instance.make_rdm2(params)
+                 return rdm1, rdm2
++            
++            def make_rdm2(self, params, norb, nelec):
++                rdm2 = self.instance.make_rdm2(params)
++                return rdm2
+ 
+             def spin_square(self, params, norb, nelec):
+                 return 0, 1
+@@ -459,7 +552,7 @@
+         circuit: Union[Callable, QuantumCircuit],
+         init_guess: Union[List[float], np.ndarray],
+         engine: str = None,
+-        engine_conf: [NoiseConf, QpuConf] = None,
++        engine_conf: Union[NoiseConf, QpuConf] = None,
+     ):
+         """
+         Construct the HEA class from Hamiltonian in :class:`QubitOperator` form and the ansatz.
+@@ -526,12 +619,13 @@
+         self.init_guess = init_guess
+         self.engine = engine
+         self.engine_conf = engine_conf
+-        self.shots = 4096
++        self.shots = 2048
+         self._grad = "param-shift"
+-
++        self.soap = False
+         self.scipy_minimize_options = None
+         self._params = None
+         self.opt_res = None
++        self.rdm1s = None
+ 
+         # allow setting these attributes for features such as calculating RDM
+         # could make it a function for customized mapping
+@@ -543,6 +637,11 @@
+         self.e_core = None
+         self.hop = None
+ 
++        self.task = None
++        self.group = "VQE"
++        self.remarks = None
++        self.save = False
++
+     def get_dmcircuit(self, params: Tensor = None, noise_conf: NoiseConf = None) -> DMCircuit:
+         """
+         Get the :class:`DMCircuit` with noise.
+@@ -695,7 +794,7 @@
+         densitymatrix = get_densitymatrix(params, self.get_dmcircuit_no_noise, self.engine_conf)
+         return densitymatrix
+ 
+-    def energy(self, params: Tensor = None, engine: str = None) -> float:
++    def energy(self, params: Tensor = None, remarks: str = None, engine: str = None) -> float:
+         """
+         Evaluate the total energy.
+ 
+@@ -741,7 +840,10 @@
+         """
+         params = self._check_params_argument(params)
+         if engine is None:
+-            engine = self.engine
++            if "VQE" in self.group:
++                engine = "tensornetwork"
++            else:
++                engine = self.engine
+         if engine == "tensornetwork":
+             e = get_energy_tensornetwork(params, self.h_array, self.get_circuit)
+         elif engine == "tensornetwork-noise":
+@@ -772,6 +874,9 @@
+                 self.get_circuit,
+                 self.engine_conf,
+                 self.shots,
++                label=self.group,
++                remarks=remarks,
++                save=self.save,
+             )
+         return e
+ 
+@@ -858,6 +963,7 @@
+                 self.get_circuit,
+                 self.shots,
+                 grad,
++                self.engine_conf,
+             )
+         return e, grad_array
+ 
+@@ -869,7 +975,11 @@
+         time1 = time()
+         if self.grad == "free":
+             if self.engine in ["tensornetwork", "tensornetwork-noise", "qpu"]:
+-                opt_res = minimize(func, x0=self.init_guess, method="COBYLA", options=self.scipy_minimize_options)
++                if self.soap:
++                    from tencirchem.utils.optimizer import soap
++                    opt_res = minimize(func, x0=self.init_guess, method=soap, options=self.scipy_minimize_options)
++                else:
++                    opt_res = minimize(func, x0=self.init_guess, method="COBYLA", options=self.scipy_minimize_options)
+             else:
+                 assert self.engine in ["tensornetwork-shot", "tensornetwork-noise&shot"]
+                 opt_res = minimizeSPSA(func, x0=self.init_guess, paired=False, niter=100, disp=True)
+@@ -887,6 +997,7 @@
+         opt_res["opt_time"] = time2 - time1
+         opt_res["init_guess"] = self.init_guess
+         opt_res["e"] = float(opt_res.fun)
++        print(f"\033[1;33mEvaluated {opt_res.nfev} times in total\033[0m")
+         self.opt_res = opt_res
+         # prepare for future modification
+         self.params = opt_res.x.copy()
+@@ -932,7 +1043,7 @@
+             return func, time2 - time1
+         return func
+ 
+-    def make_rdm1(self, params: Tensor = None) -> np.ndarray:
++    def make_rdm1_(self, params: Tensor = None) -> np.ndarray:
+         r"""
+         Evaluate the spin-traced one-body reduced density matrix (1RDM).
+ 
+@@ -969,20 +1080,185 @@
+         n_orb = n_sorb // 2
+         rdm1 = np.zeros([n_orb] * 2)
+ 
+-        # assuming closed shell
++        if isinstance(self.n_elec, tuple):
++            n_elec = self.n_elec_s
++        else:
++            if self.n_elec % 2 != 0:
++                n_elec = self.n_elec_s
++            else:
++                n_elec = self.n_elec
++                
++
+         # could optimize for tn engine by caching the statevector or dm
++        remarks = None
+         for i in range(n_orb):
+             for j in range(i + 1):
+                 fop = FermionOperator(f"{i}^ {j}")
+                 fop = fop + hermitian_conjugated(fop)
+-                qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec)
++                qop = fop_to_qop(fop, self.mapping, n_sorb, n_elec)
+                 hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
++                if self.engine == 'qpu':
++                    hea.shots = 2048
++                    hea.task = self.task
++                    hea.group = hea.task + "-RDM1"
++                    hea.save = self.save
++                    remarks = f'{i}_{j}'
+                 # for spin orbital RDM
+-                v = hea.energy(params) / 2
++                v = hea.energy(params, remarks=remarks) / 2
+                 # spatial orbital RDM
+                 rdm1[i, j] = rdm1[j, i] = 2 * v
+ 
+         return rdm1
++    
++    def make_rdm1(self, params: Tensor = None) -> np.ndarray:
++
++        print("\nEvaulating 1-RDM")
++        if self.rdm1s is not None:
++            rdm1a, rdm1b = self.rdm1s
++            rdm1 = rdm1a + rdm1b
++            print("\nUse saved 1-RDM-s, skip re-evaulating.")
++            return rdm1
++        else:
++            if params is None:
++                params = self._check_params_argument(params)
++            if self.mapping is None:
++                raise ValueError("Must first set the fermion-to-qubit mapping")
++
++            if self.mapping == "parity":
++                n_sorb = self.n_qubits + 2
++            else:
++                n_sorb = self.n_qubits
++            n_orb = n_sorb // 2
++            rdm1a = np.zeros([n_orb] * 2)
++            rdm1b = np.zeros([n_orb] * 2)
++
++            # could optimize for tn engine by caching the statevector or dm
++            remarks = None
++            for i in range(n_orb):
++                for j in range(n_orb):
++                    fop = FermionOperator(f"{i}^ {j}")
++                    qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec_s)
++                    hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
++                    if self.engine == 'qpu':
++                        hea.shots = 2048
++                        hea.task = self.task
++                        hea.group = hea.task + "-RDM1"
++                        hea.save = self.save
++                        remarks = f'{i}_{j}'
++                    # for spin orbital RDM
++                    v = hea.energy(params, remarks=remarks)
++                    # spatial orbital RDM, think this is acctually for beta since the reverse index
++                    rdm1b[i, j] = v
++            
++            for i in range(n_orb):
++                for j in range(n_orb):
++                    ii = i+n_orb
++                    jj = j+n_orb
++                    fop = FermionOperator(f"{ii}^ {jj}")
++                    qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec_s)
++                    hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
++                    if self.engine == 'qpu':
++                        hea.shots = 2048
++                        hea.task = self.task
++                        hea.group = hea.task + "-RDM1"
++                        hea.save = self.save
++                        remarks = f'{ii}_{jj}'
++                    # for spin orbital RDM
++                    v = hea.energy(params, remarks=remarks)
++                    # spatial orbital RDM
++                    rdm1a[i, j] = v
++
++            rdm1 = rdm1a + rdm1b
++
++            self.rdm1s = (rdm1a, rdm1b)
++
++            return rdm1
++    
++    def make_rdm1s(self, params: Tensor = None) -> np.ndarray:
++        r"""
++        Evaluate the spin-separated one-body reduced density matrix (1RDM).
++
++        .. math::
++
++            \textrm{1RDM}[p,q] = \langle p^\dagger q \rangle
++
++        Parameters
++        ----------
++        params: Tensor, optional
++            The circuit parameters. Defaults to None, which uses the optimized parameter
++            and :func:`kernel` must be called before.
++
++        Returns
++        -------
++        rdm1: np.ndarray
++            The spin-separated one-body RDM.
++
++        """
++        print("\nEvaulating spin separated 1-RDM")
++        if params is None:
++            params = self._check_params_argument(params)
++        if self.mapping is None:
++            raise ValueError("Must first set the fermion-to-qubit mapping")
++
++        if self.mapping == "parity":
++            n_sorb = self.n_qubits + 2
++        else:
++            n_sorb = self.n_qubits
++        n_orb = n_sorb // 2
++        rdm1a = np.zeros([n_orb] * 2)
++        rdm1b = np.zeros([n_orb] * 2)
++
++        # assuming closed shell
++        # could optimize for tn engine by caching the statevector or dm
++        remarks = None
++        for i in range(n_orb):
++            for j in range(n_orb):
++                fop = FermionOperator(f"{i}^ {j}")
++                qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec_s)
++                hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
++                if self.engine == 'qpu':
++                    hea.shots = 2048
++                    hea.task = self.task
++                    hea.group = hea.task + "-RDM1s"
++                    hea.save = self.save
++                    remarks = f'{i}_{j}'
++                # for spin orbital RDM
++                v = hea.energy(params, remarks=remarks)
++                # spatial orbital RDM, think this is acctually for beta since the reverse index
++                rdm1b[i, j] = v
++        
++        for i in range(n_orb):
++            for j in range(n_orb):
++                ii = i+n_orb
++                jj = j+n_orb
++                fop = FermionOperator(f"{ii}^ {jj}")
++                qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec_s)
++                hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
++                if self.engine == 'qpu':
++                    hea.shots = 2048
++                    hea.task = self.task
++                    hea.group = hea.task + "-RDM1s"
++                    hea.save = self.save
++                    remarks = f'{ii}_{jj}'
++                # for spin orbital RDM
++                v = hea.energy(params, remarks=remarks)
++                # spatial orbital RDM
++                rdm1a[i, j] = v
++        
++        # rdm_t = np.zeros([2*n_orb] * 2)
++        # for i in range(n_sorb):
++        #     for j in range(n_sorb):
++        #         fop = FermionOperator(f"{i}^ {j}")
++        #         qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec)
++        #         hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
++        #         # for spin orbital RDM
++        #         v = hea.energy(params)
++        #         # spatial orbital RDM
++        #         rdm_t[i, j] = v
++
++        self.rdm1s = (rdm1a, rdm1b)
++
++        return rdm1a, rdm1b#, rdm_t
+ 
+     def make_rdm2(self, params: Tensor = None) -> np.ndarray:
+         r"""
+@@ -1014,6 +1290,9 @@
+         --------
+         make_rdm1: Evaluate the spin-traced one-body reduced density matrix (1RDM).
+         """
++
++        print("\nEvaulating 2-RDM")
++
+         if params is None:
+             params = self._check_params_argument(params)
+         if self.mapping is None:
+@@ -1025,10 +1304,18 @@
+             n_sorb = self.n_qubits
+         n_orb = n_sorb // 2
+         rdm2 = np.zeros([n_orb] * 4)
++        if isinstance(self.n_elec, tuple):
++            n_elec = self.n_elec_s
++        else:
++            if self.n_elec % 2 != 0:
++                n_elec = self.n_elec_s
++            else:
++                n_elec = self.n_elec
+ 
+         calculated_indices = set()
+         # a^\dagger_p a^\dagger_q a_r a_s
+         # possible spins: aaaa, abba, baab, bbbb
++        remarks = None
+         for p, q, r, s in product(range(n_orb), repeat=4):
+             if (p, q, r, s) in calculated_indices:
+                 continue
+@@ -1037,10 +1324,16 @@
+             fop_abba = FermionOperator(f"{p}^ {q+n_orb}^ {r+n_orb} {s}")
+             fop = fop_aaaa + fop_abba
+             fop = fop + hermitian_conjugated(fop)
+-            qop = fop_to_qop(fop, self.mapping, n_sorb, self.n_elec)
++            qop = fop_to_qop(fop, self.mapping, n_sorb, n_elec)
+             hea = HEA(qop, self.get_circuit, params, self.engine, self.engine_conf)
++            if self.engine == 'qpu':
++                    hea.shots = 2048
++                    hea.task = self.task
++                    hea.group = hea.task + "-RDM2"
++                    hea.save = self.save
++                    remarks = f'{p}^_{q}^({q+n_orb}^)_{r}({r+n_orb})_{s}'
+             # for spin RDM
+-            v = hea.energy(params) / 2
++            v = hea.energy(params, remarks=remarks) / 2
+             indices = [(p, q, r, s), (s, r, q, p), (q, p, s, r), (r, s, p, q)]
+             for idx in indices:
+                 # 2* for spatial RDM
+diff -ruN tencirchem_v2024.10/static/ucc.py tencirchem_mod/static/ucc.py
+--- tencirchem_v2024.10/static/ucc.py	2024-11-29 12:16:10.142823800 +0800
++++ tencirchem_mod/static/ucc.py	2025-08-13 13:37:32.881295100 +0800
+@@ -103,7 +103,7 @@
+         return cls(m, **kwargs)
+ 
+     @classmethod
+-    def as_pyscf_solver(cls, config_function: Callable = None, **kwargs):
++    def as_pyscf_solver(cls, config_function: Callable = None, label: str = None, **kwargs):
+         """
+         Converts the ``UCC`` class to a PySCF FCI solver.
+ 
+@@ -112,6 +112,8 @@
+         config_function: callable
+             A function to configure the ``UCC`` instance.
+             Accepts the ``UCC`` instance and modifies it inplace before :func:`kernel` is called.
++        label: str
++            A string indicating what mission is undergoing, mainly for saving pickle files.
+         kwargs
+             Other arguments to be passed to the :func:`__init__` function such as ``engine``.
+ 
+@@ -139,26 +141,98 @@
+             def __init__(self):
+                 self.instance: UCC = None
+                 self.config_function = config_function
++                self.label = label
+                 self.instance_kwargs = kwargs
+                 for arg in ["run_ccsd", "run_fci"]:
+                     # keep MP2 for initial guess
+                     self.instance_kwargs[arg] = False
+ 
+             def kernel(self, h1, h2, norb, nelec, ci0=None, ecore=0, **kwargs):
++                print("\nRun on TenCirChem")
+                 self.instance = cls.from_integral(h1, h2, nelec, **self.instance_kwargs)
++                print(f"number of qubits: {self.instance.n_qubits}")
++                print(f"number of params: {self.instance.n_params}")
+                 if self.config_function is not None:
+                     self.config_function(self.instance)
+                 e = self.instance.kernel()
++
++                # if self.label:
++                #     import pickle
++                #     print("*"*50)
++                #     print(f"***[kernel] Saving circuit params to pickle: f'{self.label}-energy.pkl'***")
++                #     data = {
++                #         'h1': h1,
++                #         'h2': h2,
++                #         'norb': norb,
++                #         'nelec': nelec,
++                #         'instance_kwargs': self.instance_kwargs,
++                #         'ecore': ecore,
++                #         'e': e,
++                #     }
++                #     with open(f'{self.label}-energy.pkl', 'wb') as f:
++                #         pickle.dump(data, f)
++                #     print("***Saving pickle done***")
++                #     print("*"*50)
++
+                 return e + ecore, self.instance.params
+ 
+             def make_rdm1(self, params, norb, nelec):
+                 civector = self.instance.civector(params)
+-                return self.instance.make_rdm1(civector)
++                result = self.instance.make_rdm1(civector)
++                if self.label:
++                    method='rdm1'
++                    import pickle
++                    print("*"*50)
++                    print(f"***[kernel] Saving circuit params to pickle: {self.label}-{method}.pkl***")
++                    data = {
++                        'rdm1': result,
++                        'norb': norb,
++                        'nelec': nelec,
++                    }
++                    with open(f'{self.label}-{method}.pkl', 'wb') as f:
++                        pickle.dump(data, f)
++                    print("***Saving pickle done***")
++                    print("*"*50)
++                return result
++            
++            def make_rdm1s(self, params, norb, nelec):
++                civector = self.instance.civector(params)
++                result = self.instance.make_rdm1s(civector)
++                if self.label:
++                    method='rdm1s'
++                    import pickle
++                    print("*"*50)
++                    print(f"***[kernel] Saving circuit params to pickle: {self.label}-{method}.pkl***")
++                    data = {
++                        'rdm1s': result,
++                        'norb': norb,
++                        'nelec': nelec,
++                    }
++                    with open(f'{self.label}-{method}.pkl', 'wb') as f:
++                        pickle.dump(data, f)
++                    print("***Saving pickle done***")
++                    print("*"*50)
++                return result
+ 
+             def make_rdm12(self, params, norb, nelec):
+                 civector = self.instance.civector(params)
+                 rdm1 = self.instance.make_rdm1(civector)
+                 rdm2 = self.instance.make_rdm2(civector)
++                if self.label:
++                    method='rdm12'
++                    import pickle
++                    print("*"*50)
++                    print(f"***[kernel] Saving circuit params to pickle: {self.label}-{method}.pkl***")
++                    data = {
++                        'rdm1': rdm1,
++                        'rdm2': rdm2,
++                        'norb': norb,
++                        'nelec': nelec,
++                    }
++                    with open(f'{self.label}-{method}.pkl', 'wb') as f:
++                        pickle.dump(data, f)
++                    print("***Saving pickle done***")
++                    print("*"*50)
+                 return rdm1, rdm2
+ 
+             def spin_square(self, params, norb, nelec):
+@@ -282,7 +356,8 @@
+             self.hf.chkfile = None
+             # run this even when ``mo_coeff is not None`` because MP2 and CCSD
+             # reference energy might be desired
+-            self.e_hf = self.hf.kernel(dump_chk=False)
++            # self.e_hf = self.hf.kernel(dump_chk=False)
++            self.e_hf = self.hf.kernel()
+             self.hf.mo_coeff = canonical_mo_coeff(self.hf.mo_coeff)
+         else:
+             self.e_hf = None
+@@ -339,7 +414,12 @@
+ 
+         # Hamiltonian related
+         self.hamiltonian_lib = {}
+-        self.int1e = self.int2e = None
++        if isinstance(mol, Mole):
++            self.int1e = self.int2e = None
++        else:
++            self.int1e = mol.int1e
++            self.int2e = mol.int2e
++            self.e_core = mol.e_nuc
+         # e_core includes nuclear repulsion energy
+         self.hamiltonian, self.e_core, _ = self._get_hamiltonian_and_core(self.engine)
+ 
+@@ -645,7 +725,7 @@
+                 e_core = self.e_core
+         return hamiltonian, e_core, engine
+ 
+-    def energy(self, params: Tensor = None, engine: str = None) -> float:
++    def energy(self, params: Tensor = None, remarks: str = None, engine: str = None) -> float:
+         """
+         Evaluate the total energy.
+ 
+@@ -692,7 +772,8 @@
+             self.init_state,
+             engine,
+         )
+-        return float(e) + self.e_core
++        # print("Energy:", float(e) + self.e_core)
++        return np.array([float(e) + self.e_core])
+ 
+     def energy_and_grad(self, params: Tensor = None, engine: str = None) -> Tuple[float, Tensor]:
+         """
+@@ -744,6 +825,7 @@
+             self.init_state,
+             engine,
+         )
++        # print("Energy:", float(e) + self.e_core)
+         return float(e + self.e_core), tc.backend.numpy(g)
+ 
+     def apply_excitation(self, state: Tensor, ex_op: Tuple, engine: str = None) -> Tensor:
+@@ -832,6 +914,47 @@
+             return rdm1
+         else:
+             return rdm_mo2ao(rdm1, self.hf.mo_coeff)
++        
++    def make_rdm1s(self, statevector: Tensor = None, basis: str = "AO") -> np.ndarray:
++        r"""
++        Evaluate the spin-seperated one-body reduced density matrix (1RDM).
++
++        .. math::
++
++            \textrm{1RDM}[p,q] = \langle p^\dagger q \rangle
++
++        If active space approximation is employed, returns the full RDM of all orbitals.
++
++        Parameters
++        ----------
++        statevector: Tensor, optional
++            Custom system state. Could be CI vector or state vector.
++            Defaults to None, which uses the optimized state by :func:`civector`.
++
++        basis: str, optional
++            One of ``"AO"`` or ``"MO"``. Defaults to ``"AO"``, which is for consistency with PySCF.
++
++        Returns
++        -------
++        rdm1: np.ndarray
++            The spin-seperated one-body RDM.
++
++        See Also
++        --------
++        make_rdm2: Evaluate the spin-seperated two-body reduced density matrix (2RDM).
++        """
++        assert not self.hcb
++        civector = self._statevector_to_civector(statevector).astype(np.float64)
++
++        rdm1s_cas = fci.direct_spin1.make_rdm1s(civector, self.n_qubits // 2, self.n_elec_s)
++
++        rdm1s = self.embed_rdm_cas(rdm1s_cas)
++
++        if basis == "MO":
++            return rdm1s
++        else:
++
++            return (rdm_mo2ao(rdm1s[0], self.hf.mo_coeff), rdm_mo2ao(rdm1s[1], self.hf.mo_coeff))
+ 
+     def make_rdm2(self, statevector: Tensor = None, basis: str = "AO") -> np.ndarray:
+         r"""
+Binary files tencirchem_v2024.10/utils/__pycache__/__init__.cpython-39.pyc and tencirchem_mod/utils/__pycache__/__init__.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/utils/__pycache__/backend.cpython-39.pyc and tencirchem_mod/utils/__pycache__/backend.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/utils/__pycache__/circuit.cpython-39.pyc and tencirchem_mod/utils/__pycache__/circuit.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/utils/__pycache__/misc.cpython-39.pyc and tencirchem_mod/utils/__pycache__/misc.cpython-39.pyc differ
+Binary files tencirchem_v2024.10/utils/__pycache__/optimizer.cpython-39.pyc and tencirchem_mod/utils/__pycache__/optimizer.cpython-39.pyc differ
+diff -ruN tencirchem_v2024.10/utils/misc.py tencirchem_mod/utils/misc.py
+--- tencirchem_v2024.10/utils/misc.py	2024-11-29 12:16:10.156842000 +0800
++++ tencirchem_mod/utils/misc.py	2025-08-13 13:37:32.917815300 +0800
+@@ -81,6 +81,7 @@
+     def _wrap_scipy_opt(_params, *args):
+         # scipy assumes 64bit https://github.com/scipy/scipy/issues/5832
+         res = f(tc.backend.convert_to_tensor(_params), *args)
++        # print('E-opt:', res[0])
+         if gradient:
+             return [np.asarray(tc.backend.numpy(v), dtype=np.float64) for v in res]
+         else:
+diff -ruN tencirchem_v2024.10/utils/optimizer.py tencirchem_mod/utils/optimizer.py
+--- tencirchem_v2024.10/utils/optimizer.py	2024-11-29 12:16:10.159842200 +0800
++++ tencirchem_mod/utils/optimizer.py	2025-08-13 13:37:32.920815400 +0800
+@@ -45,10 +45,12 @@
+     nfev = 0
+     nit = 0
+ 
+-    def _fun(_x):
++    def _fun(_x, remarks: str = None):
+         nonlocal nfev
+         nfev += 1
+-        return fun(_x, *args)
++        # return fun(_x, *args)
++        print("params:",_x)
++        return fun(_x, f"{remarks}-{nfev}")
+ 
+     trajectory = [x0.copy()]
+     vec_list = []
+@@ -60,7 +62,8 @@
+         vec_list.append(vec)
+     vec_list_copy = vec_list.copy()
+ 
+-    e_list = [_fun(trajectory[-1])]
++    e_list = [_fun(trajectory[-1], 'Ini')]
++    print(f"\033[1;33mE-ini-{nfev}: {e_list[-1]}\033[0m")
+     nfev_list = [nfev]
+     offset_list = []
+     diff_list = []
+@@ -80,7 +83,8 @@
+             f0 = e_list[-1 - len(vec_list_copy)]
+             pn = trajectory[-1]
+             fn = e_list[-1]
+-            fe = _fun(2 * pn - p0)
++            fe = _fun(2 * pn - p0, 'Fit')
++            print(f"E-fit-{nfev}: {fe}")
+             if fe > f0:
+                 continue
+             average_direction = pn - p0
+@@ -100,17 +104,20 @@
+         x = [-scale, 0, scale]
+         es = [None, e_list[-1], None]
+         for j in [0, -1]:
+-            es[j] = _fun(trajectory[-1] + x[j] * vec_normed)
++            es[j] = _fun(trajectory[-1] + x[j] * vec_normed, "Fit")
++            print(f"E-fit-{nfev}: {es[j]}")
+         if np.argmin(es) == 0:
+             x = [-scale * 4, -scale, 0, scale]
+             es = [None, es[0], es[1], es[2]]
+             for j in [0]:
+-                es[j] = _fun(trajectory[-1] + x[j] * vec_normed)
++                es[j] = _fun(trajectory[-1] + x[j] * vec_normed, "Fit")
++                print(f"E-fit-{nfev}: {es[j]}")
+         elif np.argmin(es) == 2:
+             x = [-scale, 0, scale, scale * 4]
+             es = [es[0], es[1], es[2], None]
+             for j in [-1]:
+-                es[j] = _fun(trajectory[-1] + x[j] * vec_normed)
++                es[j] = _fun(trajectory[-1] + x[j] * vec_normed, "Fit")
++                print(f"E-fit-{nfev}: {es[j]}")
+         else:
+             assert np.argmin(es) == 1
+         a, b, c = np.polyfit(x, es, 2)
+@@ -126,7 +133,8 @@
+         if len(es) == 3:
+             e_list.append(e)
+         else:
+-            e_list.append(_fun(trajectory[-1]))
++            e_list.append(_fun(trajectory[-1], "Fit"))
++        print(f"\033[1;33mE-opt-{nfev}: {e_list[-1]}\033[0m")
+         diff_list.append(e_list[-1] - e_list[-2])
+         nfev_list.append(nfev)
+ 
+@@ -140,7 +148,9 @@
+                 break
+ 
+     # the last measurement is probably from fitting
+-    y = _fun(trajectory[-1])
++    y = _fun(trajectory[-1], "Fnl")
++    e_list.append(y)
++    print(f"\033[1;33mE-fnl-{nfev}: {y}\033[0m")
+     res = OptimizeResult(
+         fun=y,
+         x=trajectory[-1],

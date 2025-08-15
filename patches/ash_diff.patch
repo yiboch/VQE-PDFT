@@ -1,0 +1,565 @@
+diff -ruN ash_v0.95_bdf9c89/__init__.py ash_mod/__init__.py
+--- ash_v0.95_bdf9c89/__init__.py	2025-08-14 15:49:20.601530700 +0800
++++ ash_mod/__init__.py	2025-08-14 14:20:37.223309300 +0800
+@@ -77,6 +77,7 @@
+     run_orca_mapspc, make_molden_file_ORCA, grab_coordinates_from_ORCA_output, ICE_WF_CFG_CI_size, orca_frag_guess, orblocfind, ORCAfinalenergygrab, \
+     read_ORCA_json_file, create_ORCA_json_file,get_densities_from_ORCA_json,grab_ORCA_wfn,ORCA_orbital_setup
+ import ash.interfaces.interface_ORCA
++from .interfaces.interface_tencirchem import TenCirChemTheory
+ 
+ from .interfaces.interface_Psi4 import Psi4Theory
+ from .interfaces.interface_dalton import DaltonTheory
+Binary files ash_v0.95_bdf9c89/databases/basis-sets/__pycache__/__init__.cpython-39.pyc and ash_mod/databases/basis-sets/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/databases/forcefields/openmm_xml_conversions/example-phosphate-conversion/__pycache__/parmed-convert.cpython-39.pyc and ash_mod/databases/forcefields/openmm_xml_conversions/example-phosphate-conversion/__pycache__/parmed-convert.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/Molcrys-QM-MM-example/Na2HPO4-xtl-file/__pycache__/molcrys-test.cpython-39.pyc and ash_mod/examples/Molcrys-QM-MM-example/Na2HPO4-xtl-file/__pycache__/molcrys-test.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM-other-setups/OpenMM-Amberfiles-DHFR/__pycache__/dhfr-test-amber.cpython-39.pyc and ash_mod/examples/OpenMM-other-setups/OpenMM-Amberfiles-DHFR/__pycache__/dhfr-test-amber.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM-other-setups/OpenMM-CHARMMfiles-DHFR/__pycache__/dhfr-test-charmm.cpython-39.pyc and ash_mod/examples/OpenMM-other-setups/OpenMM-CHARMMfiles-DHFR/__pycache__/dhfr-test-charmm.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/1-modelsetup-bad1.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/1-modelsetup-bad1.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/1-modelsetup-bad2.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/1-modelsetup-bad2.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/1-modelsetup-bad3.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/1-modelsetup-bad3.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/1-modelsetup-bad4.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/1-modelsetup-bad4.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/2-modelsetup.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/2-modelsetup.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/nonbonded.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/ferredoxin/1-Preparation/__pycache__/nonbonded.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/lysozyme/__pycache__/protein-prep-MM_MD-andQMMM.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/lysozyme/__pycache__/protein-prep-MM_MD-andQMMM.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/1-Preparation/__pycache__/1-modelsetup-bad1.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/1-Preparation/__pycache__/1-modelsetup-bad1.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/1-Preparation/__pycache__/1-modelsetup-bad2.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/1-Preparation/__pycache__/1-modelsetup-bad2.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/1-Preparation/__pycache__/1-modelsetup-bad3.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/1-Preparation/__pycache__/1-modelsetup-bad3.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/1-Preparation/__pycache__/1-modelsetup_good_advanced.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/1-Preparation/__pycache__/1-modelsetup_good_advanced.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/1-Preparation/__pycache__/1-modelsetup_good_simple.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/1-Preparation/__pycache__/1-modelsetup_good_simple.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/2-Classical-Simulation/__pycache__/2a-classicalMD.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/2-Classical-Simulation/__pycache__/2a-classicalMD.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/2-Classical-Simulation/__pycache__/2b-classicalMD.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/2-Classical-Simulation/__pycache__/2b-classicalMD.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/3-Semiempirical-QM_MM-MD/__pycache__/3-QMMM_MD.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/3-Semiempirical-QM_MM-MD/__pycache__/3-QMMM_MD.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/4-QM_MM-Optimization/__pycache__/4-QMMM_Opt-bigact-XTB.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/4-QM_MM-Optimization/__pycache__/4-QMMM_Opt-bigact-XTB.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/4-QM_MM-Optimization/__pycache__/4-QMMM_Opt-bigact.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/4-QM_MM-Optimization/__pycache__/4-QMMM_Opt-bigact.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/4-QM_MM-Optimization/__pycache__/4-QMMM_Opt-smallact-XTB.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/4-QM_MM-Optimization/__pycache__/4-QMMM_Opt-smallact-XTB.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/4-QM_MM-Optimization/__pycache__/4-QMMM_Opt-smallact.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/4-QM_MM-Optimization/__pycache__/4-QMMM_Opt-smallact.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/4-QM_MM-Optimization/__pycache__/define_activeregion.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/4-QM_MM-Optimization/__pycache__/define_activeregion.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/QM-MM-boundary-setup/__pycache__/QMMM_SP_QMregion-I.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/QM-MM-boundary-setup/__pycache__/QMMM_SP_QMregion-I.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/QM-MM-boundary-setup/__pycache__/QMMM_SP_QMregion-II.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/QM-MM-boundary-setup/__pycache__/QMMM_SP_QMregion-II.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/QM-MM-boundary-setup/__pycache__/QMMM_SP_QMregion-III.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/QM-MM-boundary-setup/__pycache__/QMMM_SP_QMregion-III.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/QM-MM-boundary-setup/__pycache__/QMMM_SP_QMregion-IV.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/QM-MM-boundary-setup/__pycache__/QMMM_SP_QMregion-IV.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/OpenMM_Modeller-setups/rubredoxin/QM-MM-boundary-setup/__pycache__/QMMM_SP_QMregion-V.cpython-39.pyc and ash_mod/examples/OpenMM_Modeller-setups/rubredoxin/QM-MM-boundary-setup/__pycache__/QMMM_SP_QMregion-V.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/QM-MM-examples/QM-MM-CHARMM-example/__pycache__/QM_MM_ORCA_OpenMM-CHARMM-dhfr.cpython-39.pyc and ash_mod/examples/QM-MM-examples/QM-MM-CHARMM-example/__pycache__/QM_MM_ORCA_OpenMM-CHARMM-dhfr.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/QM-MM-examples/QM-MM-ORCA-nonbondedtheory/__pycache__/H2O-MeOH.cpython-39.pyc and ash_mod/examples/QM-MM-examples/QM-MM-ORCA-nonbondedtheory/__pycache__/H2O-MeOH.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Localized-orbitals/__pycache__/calc_localized_orbitals_for_NEB_path.cpython-39.pyc and ash_mod/examples/density-analysis/Localized-orbitals/__pycache__/calc_localized_orbitals_for_NEB_path.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/CFour/CCSD_T_basis/__pycache__/ccsd_t_basis.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/CFour/CCSD_T_basis/__pycache__/ccsd_t_basis.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/CFour/__pycache__/ccsd.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/CFour/__pycache__/ccsd.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/CFour/__pycache__/ccsd_t.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/CFour/__pycache__/ccsd_t.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/DMRG/__pycache__/DMRG_CCSD_Tnat_noPT_eps-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/DMRG/__pycache__/DMRG_CCSD_Tnat_noPT_eps-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/DMRG/__pycache__/DMRG_CCSDnat_noPT_eps-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/DMRG/__pycache__/DMRG_CCSDnat_noPT_eps-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/DMRG/__pycache__/DMRG_MP2nat_noPT_eps-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/DMRG/__pycache__/DMRG_MP2nat_noPT_eps-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Difference-densities/ref-HF/__pycache__/VMD-state-create.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Difference-densities/ref-HF/__pycache__/VMD-state-create.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Difference-densities/ref-HF/__pycache__/diffdens.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Difference-densities/ref-HF/__pycache__/diffdens.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Difference-densities/ref-ICE-CI/__pycache__/VMD-state-create.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Difference-densities/ref-ICE-CI/__pycache__/VMD-state-create.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Difference-densities/ref-ICE-CI/__pycache__/diffdens.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Difference-densities/ref-ICE-CI/__pycache__/diffdens.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ELF/__pycache__/ELF.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ELF/__pycache__/ELF.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ELF/__pycache__/VMD-ELF-state.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ELF/__pycache__/VMD-ELF-state.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Hirshfeld/__pycache__/hirshfeld.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Hirshfeld/__pycache__/hirshfeld.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/MBO/__pycache__/MBO.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/MBO/__pycache__/MBO.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/MRCC/__pycache__/ccsd.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/MRCC/__pycache__/ccsd.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/MRCC/__pycache__/ccsdt.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/MRCC/__pycache__/ccsdt.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/MRCC/__pycache__/ccsdtq.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/MRCC/__pycache__/ccsdtq.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA/__pycache__/CCSD.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA/__pycache__/CCSD.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA/__pycache__/HF-DFT.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA/__pycache__/HF-DFT.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA/__pycache__/MP2.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA/__pycache__/MP2.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-RHF-tgen-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-RHF-tgen-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-ccsdORBOPTnatorbs-tgen-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-ccsdORBOPTnatorbs-tgen-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-ccsdlinearizednatorbs-tgen-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-ccsdlinearizednatorbs-tgen-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-ccsdnatorbs-tgen-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-ccsdnatorbs-tgen-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-mp2Relax_natorbs-tgen-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-mp2Relax_natorbs-tgen-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-mp2natorbs-tgen-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-ICE-CI/__pycache__/ICE-CI-mp2natorbs-tgen-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/CASSCF.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/CASSCF.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/MRCI_Q_notrunc.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/MRCI_Q_notrunc.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/MRCI_Q_notrunc_CAS_6_5.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/MRCI_Q_notrunc_CAS_6_5.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/MRCI_Q_trunc_default.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/MRCI_Q_trunc_default.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/MRCI_Q_trunc_default_CAS_2_2.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/MRCI_Q_trunc_default_CAS_2_2.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/MRCI_Q_trunc_default_CAS_6_5.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/ORCA-MR/__pycache__/MRCI_Q_trunc_default_CAS_6_5.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/ALL.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/ALL.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/MR.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/MR.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/SR.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/SR.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/nearFCI.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/nearFCI.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/plot_dipole_All_methods.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/plot_dipole_All_methods.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/plot_dipole_CCSD_T_basis.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/plot_dipole_CCSD_T_basis.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/plot_dipole_DMRG_vs_orbs.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/plot_dipole_DMRG_vs_orbs.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/plot_dipole_ICE_CI_vs_orbs.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/plot_dipole_ICE_CI_vs_orbs.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/plot_dipole_SHCI_vs_orbs.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Dipole-moment/__pycache__/plot_dipole_SHCI_vs_orbs.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Hirshfeld/__pycache__/ALL.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/Hirshfeld/__pycache__/ALL.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/MBO/__pycache__/ALL.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/Plots/MBO/__pycache__/ALL.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/SHCI/__pycache__/SHCI_CCSD_T_nat_noPT_eps-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/SHCI/__pycache__/SHCI_CCSD_T_nat_noPT_eps-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/SHCI/__pycache__/SHCI_CCSD_T_nat_withPT_eps-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/SHCI/__pycache__/SHCI_CCSD_T_nat_withPT_eps-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/SHCI/__pycache__/SHCI_CCSDnat_noPT_eps-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/SHCI/__pycache__/SHCI_CCSDnat_noPT_eps-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/SHCI/__pycache__/SHCI_CCSDnat_withPT_eps-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/SHCI/__pycache__/SHCI_CCSDnat_withPT_eps-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/SHCI/__pycache__/SHCI_MP2nat_noPT_eps-loop.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/SHCI/__pycache__/SHCI_MP2nat_noPT_eps-loop.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/pySCF/CCSD_T_basis-calculations/__pycache__/ccsd_t_basis.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/pySCF/CCSD_T_basis-calculations/__pycache__/ccsd_t_basis.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/pySCF/__pycache__/bccd.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/pySCF/__pycache__/bccd.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/pySCF/__pycache__/bccd_t.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/pySCF/__pycache__/bccd_t.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/pySCF/__pycache__/ccsd.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/pySCF/__pycache__/ccsd.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/Tutorial-HLWFT-analysis/CO/pySCF/__pycache__/ccsd_t.cpython-39.pyc and ash_mod/examples/density-analysis/Tutorial-HLWFT-analysis/CO/pySCF/__pycache__/ccsd_t.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/deformation-density/from-gbwfiles/__pycache__/diffdens-from-gbwfiles.cpython-39.pyc and ash_mod/examples/density-analysis/deformation-density/from-gbwfiles/__pycache__/diffdens-from-gbwfiles.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/deformation-density/using-function/HF/__pycache__/NOCV_analysis.cpython-39.pyc and ash_mod/examples/density-analysis/deformation-density/using-function/HF/__pycache__/NOCV_analysis.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/deformation-density/using-function/HF/__pycache__/deformation-density-only.cpython-39.pyc and ash_mod/examples/density-analysis/deformation-density/using-function/HF/__pycache__/deformation-density-only.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/deformation-density/using-function/NH3-BH3/__pycache__/NOCV-analysis.cpython-39.pyc and ash_mod/examples/density-analysis/deformation-density/using-function/NH3-BH3/__pycache__/NOCV-analysis.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/difference-density/difference-density-and-WFT/__pycache__/diffdens-from-GBW-and-NAT-files.cpython-39.pyc and ash_mod/examples/density-analysis/difference-density/difference-density-and-WFT/__pycache__/diffdens-from-GBW-and-NAT-files.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/difference-density/difference-density-and-WFT/__pycache__/diffdens_tool_function.cpython-39.pyc and ash_mod/examples/density-analysis/difference-density/difference-density-and-WFT/__pycache__/diffdens_tool_function.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/difference-density/difference-density-and-WFT/__pycache__/run_ORCA_DFT_calcs_and_get_diffdensities.cpython-39.pyc and ash_mod/examples/density-analysis/difference-density/difference-density-and-WFT/__pycache__/run_ORCA_DFT_calcs_and_get_diffdensities.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/difference-density/difference-density-and-WFT/__pycache__/run_ORCA_WFT_calcs_and_get_diffensities.cpython-39.pyc and ash_mod/examples/density-analysis/difference-density/difference-density-and-WFT/__pycache__/run_ORCA_WFT_calcs_and_get_diffensities.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/difference-density/from-cubefiles/__pycache__/test-from-cubefiles.cpython-39.pyc and ash_mod/examples/density-analysis/difference-density/from-cubefiles/__pycache__/test-from-cubefiles.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/difference-density/from-gbwfiles/__pycache__/diffdens-from-gbwfiles.cpython-39.pyc and ash_mod/examples/density-analysis/difference-density/from-gbwfiles/__pycache__/diffdens-from-gbwfiles.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/difference-density/from-scratch/__pycache__/diffdens-from-scratch.cpython-39.pyc and ash_mod/examples/density-analysis/difference-density/from-scratch/__pycache__/diffdens-from-scratch.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/difference-density/using-function/__pycache__/diffdens-function-redox.cpython-39.pyc and ash_mod/examples/density-analysis/difference-density/using-function/__pycache__/diffdens-function-redox.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/density-analysis/difference-density/using-function/__pycache__/diffdens-function-theory.cpython-39.pyc and ash_mod/examples/density-analysis/difference-density/using-function/__pycache__/diffdens-function-theory.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-100ps/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-100ps/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-100ps/__pycache__/mtd-100ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-100ps/__pycache__/mtd-100ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps/__pycache__/mtd-10ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps/__pycache__/mtd-10ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/__pycache__/plotting.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/__pycache__/plotting.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_20/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_20/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_20/__pycache__/mtd-10ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_20/__pycache__/mtd-10ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_25/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_25/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_25/__pycache__/mtd-10ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_25/__pycache__/mtd-10ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_30/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_30/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_30/__pycache__/mtd-10ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_30/__pycache__/mtd-10ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_35/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_35/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_35/__pycache__/mtd-10ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_35/__pycache__/mtd-10ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_40/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_40/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_40/__pycache__/mtd-10ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_40/__pycache__/mtd-10ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_45/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_45/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_45/__pycache__/mtd-10ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_45/__pycache__/mtd-10ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_50/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_50/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_50/__pycache__/mtd-10ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_50/__pycache__/mtd-10ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_75/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_75/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_75/__pycache__/mtd-10ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth0_75/__pycache__/mtd-10ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth1_00/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth1_00/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth1_00/__pycache__/mtd-10ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-10ps-biaswidths/biaswidth1_00/__pycache__/mtd-10ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-1ps/__pycache__/get_free_energy.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-1ps/__pycache__/get_free_energy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/mtd-1ps/__pycache__/mtd-1ps.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/mtd-1ps/__pycache__/mtd-1ps.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/plot-1-10-100/__pycache__/plotting.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/plot-1-10-100/__pycache__/plotting.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/surface-scan/__pycache__/plot_surfacescan.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/surface-scan/__pycache__/plot_surfacescan.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/metadynamics/1CV-butane/surface-scan/__pycache__/surface-scan.cpython-39.pyc and ash_mod/examples/metadynamics/1CV-butane/surface-scan/__pycache__/surface-scan.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/workflows/highlevel-thermochemistry/CH4-atomization/__pycache__/test-qro.cpython-39.pyc and ash_mod/examples/workflows/highlevel-thermochemistry/CH4-atomization/__pycache__/test-qro.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/workflows/highlevel-thermochemistry/N2-BDE/__pycache__/Reaction-CoreValence.cpython-39.pyc and ash_mod/examples/workflows/highlevel-thermochemistry/N2-BDE/__pycache__/Reaction-CoreValence.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/workflows/highlevel-thermochemistry/N2-BDE/__pycache__/Reaction-general-bigscript.cpython-39.pyc and ash_mod/examples/workflows/highlevel-thermochemistry/N2-BDE/__pycache__/Reaction-general-bigscript.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/workflows/highlevel-thermochemistry/N2-BDE/__pycache__/Reaction-general-function.cpython-39.pyc and ash_mod/examples/workflows/highlevel-thermochemistry/N2-BDE/__pycache__/Reaction-general-function.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/workflows/highlevel-thermochemistry/near-FullCI-comparison/__pycache__/fci-methods-function.cpython-39.pyc and ash_mod/examples/workflows/highlevel-thermochemistry/near-FullCI-comparison/__pycache__/fci-methods-function.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/examples/workflows/highlevel-thermochemistry/near-FullCI-comparison/__pycache__/h2o_IP_fci-ice-vs-simpler.cpython-39.pyc and ash_mod/examples/workflows/highlevel-thermochemistry/near-FullCI-comparison/__pycache__/h2o_IP_fci-ice-vs-simpler.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/external/additional_python_modules/AutoELF/__pycache__/__init__.cpython-39.pyc and ash_mod/external/additional_python_modules/AutoELF/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/functions/__pycache__/__init__.cpython-39.pyc and ash_mod/functions/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/functions/__pycache__/functions_elstructure.cpython-39.pyc and ash_mod/functions/__pycache__/functions_elstructure.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/functions/__pycache__/functions_general.cpython-39.pyc and ash_mod/functions/__pycache__/functions_general.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/functions/__pycache__/functions_molcrys.cpython-39.pyc and ash_mod/functions/__pycache__/functions_molcrys.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/functions/__pycache__/functions_optimization.cpython-39.pyc and ash_mod/functions/__pycache__/functions_optimization.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/functions/__pycache__/functions_parallel.cpython-39.pyc and ash_mod/functions/__pycache__/functions_parallel.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/functions/__pycache__/functions_solv.cpython-39.pyc and ash_mod/functions/__pycache__/functions_solv.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/__init__.cpython-39.pyc and ash_mod/interfaces/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_ASE.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_ASE.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_BigDFT.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_BigDFT.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_CFour.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_CFour.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_CP2K.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_CP2K.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_MLatom.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_MLatom.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_MRCC.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_MRCC.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_NWChem.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_NWChem.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_ORCA.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_ORCA.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_OpenMM.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_OpenMM.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_Psi4.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_Psi4.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_PyMBE.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_PyMBE.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_QUICK.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_QUICK.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_TeraChem.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_TeraChem.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_VMD.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_VMD.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_block.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_block.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_ccpy.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_ccpy.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_crest.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_crest.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_dalton.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_dalton.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_deMon.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_deMon.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_dice.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_dice.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_ezfcf.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_ezfcf.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_geometric_new.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_geometric_new.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_ipie.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_ipie.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_knarr.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_knarr.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_mdtraj.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_mdtraj.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_multiwfn.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_multiwfn.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_plumed.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_plumed.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_pyscf.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_pyscf.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_safires.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_safires.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_sparrow.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_sparrow.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/interfaces/__pycache__/interface_xtb.cpython-39.pyc and ash_mod/interfaces/__pycache__/interface_xtb.cpython-39.pyc differ
+diff -ruN ash_v0.95_bdf9c89/interfaces/interface_OpenMM.py ash_mod/interfaces/interface_OpenMM.py
+--- ash_v0.95_bdf9c89/interfaces/interface_OpenMM.py	2025-08-14 15:49:27.713946300 +0800
++++ ash_mod/interfaces/interface_OpenMM.py	2025-08-14 14:20:46.326903000 +0800
+@@ -254,7 +254,8 @@
+             else:
+                 # Load CHARMM PSF files via native routine.
+                 self.psf = openmm.app.CharmmPsfFile(psffile)
+-                self.params = openmm.app.CharmmParameterSet(charmmtopfile, charmmprmfile, permissive=True)
++                charmmfiles = charmmtopfile + charmmprmfile
++                self.params = openmm.app.CharmmParameterSet(*charmmfiles, permissive=True)
+                 # Grab resnames from psf-object
+                 self.resnames = [self.psf.atom_list[i].residue.resname for i in range(0, len(self.psf.atom_list))]
+                 self.resids = [self.psf.atom_list[i].residue.idx for i in range(0, len(self.psf.atom_list))]
+diff -ruN ash_v0.95_bdf9c89/interfaces/interface_geometric_new.py ash_mod/interfaces/interface_geometric_new.py
+--- ash_v0.95_bdf9c89/interfaces/interface_geometric_new.py	2025-08-14 15:49:27.733821200 +0800
++++ ash_mod/interfaces/interface_geometric_new.py	2025-08-14 14:20:46.360918800 +0800
+@@ -22,7 +22,7 @@
+ def geomeTRICOptimizer(theory=None, fragment=None, charge=None, mult=None, coordsystem='tric', frozenatoms=None, constraints=None,
+                        constrainvalue=False, maxiter=250, ActiveRegion=False, actatoms=None,
+                        convergence_setting=None, conv_criteria=None, print_atoms_list=None, TSOpt=False, hessian=None, partial_hessian_atoms=None,
+-                       modelhessian=None, subfrctor=1, MM_PDB_traj_write=False, printlevel=2):
++                       modelhessian=None, subfrctor=1, MM_PDB_traj_write=False, printlevel=2, optimized_filename='Fragement-optimized'):
+     """
+     Wrapper function around GeomeTRICOptimizerClass
+     """
+@@ -38,7 +38,7 @@
+                         hessian=hessian, partial_hessian_atoms=partial_hessian_atoms,modelhessian=modelhessian,
+                         convergence_setting=convergence_setting, conv_criteria=conv_criteria,
+                         print_atoms_list=print_atoms_list, subfrctor=subfrctor, MM_PDB_traj_write=MM_PDB_traj_write,
+-                        printlevel=printlevel)
++                        printlevel=printlevel, optimized_filename=optimized_filename)
+ 
+     #Providing theory and fragment to run method. Also constraints
+     result = optimizer.run(theory=theory, fragment=fragment, charge=charge, mult=mult,
+@@ -53,8 +53,8 @@
+         def __init__(self,theory=None, charge=None, mult=None, coordsystem='tric',
+                      frozenatoms=None, maxiter=250, ActiveRegion=False, actatoms=None,
+                        convergence_setting=None, conv_criteria=None, TSOpt=False, hessian=None,
+-                       print_atoms_list=None, partial_hessian_atoms=None, modelhessian=None,
+-                       subfrctor=1, MM_PDB_traj_write=False, printlevel=2):
++                       print_atoms_list=None, partial_hessian_atoms=None, modelhessian=None, 
++                       subfrctor=1, MM_PDB_traj_write=False, printlevel=2, optimized_filename='Fragment-optimzed'):
+ 
+             self.printlevel=printlevel
+             print_line_with_mainheader("geomeTRICOptimizer initialization")
+@@ -104,6 +104,9 @@
+             #Setup convergence criteria (sets self.conv_criteria)
+             self.convergence_criteria(convergence_setting,conv_criteria)
+ 
++            # set the output file name 
++            self.output_filename=optimized_filename
++
+             ######################
+             #SOME PRINTING of settings
+             ######################
+@@ -118,6 +121,7 @@
+                 print("TS Optimization:", self.TSOpt)
+                 print("Hessian Option:", self.hessian)
+                 print("Convergence criteria:", self.conv_criteria)
++                print("Output Files name:", self.output_filename)
+ 
+         #Requires info on theory and fragment
+         def print_atoms_output_setting(self,theory,fragment):
+@@ -533,8 +537,9 @@
+             #Replacing coordinates in fragment
+             fragment.replace_coords(fragment.elems,ashengine.full_current_coords, conn=False)
+             #Writing out fragment file and XYZ file
+-            fragment.print_system(filename='Fragment-optimized.ygg')
+-            fragment.write_xyzfile(xyzfilename='Fragment-optimized.xyz')
++            fragment.print_system(filename=f'{self.output_filename}.ygg')
++            fragment.write_xyzfile(xyzfilename=f'{self.output_filename}.xyz')
++            fragment.write_pdbfile(self.output_filename)
+             fragment.set_energy(finalenergy)
+ 
+             #Active region XYZ-file
+diff -ruN ash_v0.95_bdf9c89/interfaces/interface_pyscf.py ash_mod/interfaces/interface_pyscf.py
+--- ash_v0.95_bdf9c89/interfaces/interface_pyscf.py	2025-08-14 15:49:27.742758900 +0800
++++ ash_mod/interfaces/interface_pyscf.py	2025-08-14 14:20:46.383763700 +0800
+@@ -41,7 +41,8 @@
+                   AVAS=False, DMET_CAS=False, CAS_AO_labels=None, APC=False, apc_max_size=(2,2),
+                   cas_nmin=None, cas_nmax=None, losc=False, loscfunctional=None, LOSC_method='postSCF',
+                   loscpath=None, LOSC_window=None,
+-                  mcpdft=False, mcpdft_functional=None):
++                  mcpdft=False, mcpdft_functional=None,
++                  tencirchem=False, ansatz=None, engine=None, engine_conf=None):
+ 
+         self.theorynamelabel="PySCF"
+         self.theorytype="QM"
+@@ -313,6 +314,15 @@
+         self.num_basis_functions=None
+         self.num_orbs=None
+ 
++        # TenCirChem & TensorCircuit
++        self.tencirchem = tencirchem
++        self.ansatz = ansatz
++        self.engine = engine
++        self.engine_conf = engine_conf
++
++        # atom charge after CASCI
++        self.qm_mulliken_charge = None
++
+         #Print the options
+         if self.printlevel >= 1:
+             print("SCF:", self.SCF)
+@@ -704,6 +714,8 @@
+                 mulliken_spinpop = pyscf.scf.uhf.mulliken_spin_pop(self.mol,dm, verbose=verbose)
+                 print(f"{label} Mulliken charges:", mulliken_pop[1])
+                 print(f"{label} Mulliken spin pops:", mulliken_spinpop[1])
++        if label == 'casci':
++            self.qm_mulliken_charge = mulliken_pop[1]
+         return
+ 
+     def run_stability_analysis(self):
+@@ -1042,6 +1054,7 @@
+     def run_CAS(self,elems=None):
+         print("\nInside run_CAS")
+         import pyscf.mcscf
++        import pyscf.mcpdft
+ 
+         ##############################################
+         #First run SCF
+@@ -1227,7 +1240,21 @@
+             print("Doing CAS-CI (no orbital optimization)")
+             if self.mcpdft is True:
+                 print("mcpdft is True")
+-                casci= pyscf.mcpdft_l.CASCI (self.mf, self.mcpdft_functional, norb_cas, nel_cas)
++                # self.mf.run()
++                casci= pyscf.mcpdft.CASCI (self.mf, self.mcpdft_functional, norb_cas, nel_cas)
++                
++                if self.tencirchem == True:
++                    from tencirchem import ROUCCSD, HEA
++                    if self.ansatz == "ROUCCSD":
++                        casci.fcisolver = ROUCCSD.as_pyscf_solver(label=self.label)
++                    elif self.ansatz == "HEA":
++                        casci.fcisolver = HEA.as_pyscf_solver(label=self.label, 
++                                                              engine=self.engine, 
++                                                              engine_conf=self.engine_conf,
++                                                              save=True,
++                                                              )
++                        casci.fcisolver.scipy_minimize_options = {"ret_traj":True}
++                
+                 casci.verbose=self.verbose_setting
+                 mcpdft_result = casci.run()
+                 print("E(CASSCF):", mcpdft_result.e_mcscf)
+@@ -1236,6 +1263,8 @@
+                 print("E(ci):", mcpdft_result.e_cas)
+                 print("")
+                 self.energy = mcpdft_result.e_tot
++                self.run_population_analysis(casci, unrestricted=False, type='Mulliken', label='casci')
++
+                 print("CAS-CI run done\n")
+             else:
+                 #Regular CAS-CI
+@@ -2216,6 +2245,7 @@
+         # CREATE MF OBJECT
+         ############################
+         self.create_mf() #Creates self.mf
++        # self.mf.run()
+ 
+         #GHF/GKS
+         if self.scf_type == 'GHF' or self.scf_type == 'GKS':
+diff -ruN ash_v0.95_bdf9c89/interfaces/interface_tencirchem.py ash_mod/interfaces/interface_tencirchem.py
+--- ash_v0.95_bdf9c89/interfaces/interface_tencirchem.py	1970-01-01 08:00:00.000000000 +0800
++++ ash_mod/interfaces/interface_tencirchem.py	2025-08-14 14:20:46.501049500 +0800
+@@ -0,0 +1,81 @@
++import ash.constants
++from pyscf import M, scf, qmmm, gto
++from pyscf.mcscf import CASCI, CASSCF
++from tencirchem import HEA
++import numpy as np
++import copy
++
++# TenCirChem Theory object.
++class TenCirChemTheory:
++    def __init__(self, numcores=1) -> None:
++        print("TenCirChem initialization")
++
++        self.theorynamelabel="TenCirChem"
++        self.theorytype="QM"
++        self.analytic_hessian=True
++
++        self.energy = None
++        self.grad = None
++        self.pcgrad = None
++        self.numcores = numcores
++
++    def translate_coords(self, coords, elems) -> list:
++        output_coords = []
++        for i in range(len(elems)):
++            atom = [elems[i]]
++            atom.extend(coords[i])
++            output_coords.append(atom)
++        return output_coords
++    
++    def force_on_mm(self, mol, mm_coords, mm_charges, dm):
++        # The interaction between QM atoms and MM particles
++        # \sum_K d/dR (1/|r_K-R|) = \sum_K (r_K-R)/|r_K-R|^3
++        qm_coords = mol.atom_coords()
++        qm_charges = mol.atom_charges()
++        dr = qm_coords[:,None,:] - mm_coords
++        r = np.linalg.norm(dr, axis=2)
++        g = np.einsum('r,R,rRx,rR->Rx', qm_charges, mm_charges, dr, r**-3)
++
++        # The interaction between electron density and MM particles
++        # d/dR <i| (1/|r-R|) |j> = <i| d/dR (1/|r-R|) |j> = <i| -d/dr (1/|r-R|) |j>
++        #   = <d/dr i| (1/|r-R|) |j> + <i| (1/|r-R|) |d/dr j>
++        for i, q in enumerate(mm_charges):
++            with mol.with_rinv_origin(mm_coords[i]):
++                v = mol.intor('int1e_iprinv')
++            f =(np.einsum('ij,xji->x', dm, v) +
++                np.einsum('ij,xij->x', dm, v.conj())) * -q
++            g[i] += f
++
++        # Force = -d/dR
++        return -g
++    
++    
++    def run(self, current_coords=None, charge=None, mult=None, current_MM_coords=None, MMcharges=None, qm_elems=None, mm_elems=None,
++             Grad=True, Hessian=False, PC=True, numcores=None):
++        """
++        current_coords: 当前QM体系的坐标
++        charge: QM体系的等效电荷
++        mult: 多重态
++        current_MM_coords: MM部分的坐标
++        MMcharges: MM部分的等效电荷
++        qm_elems: QM部分原子编号
++        mm_elems: MM部分原子编号
++        charge: 
++        """
++
++        basis = 'sto3g'
++        qm_atoms = self.translate_coords(current_coords, qm_elems)
++        mol = M(atom=qm_atoms, basis=basis)
++        hf = mol.HF()
++        casci = CASCI(hf, 2, 2)
++        # casci.canonicalization = False
++        casci.fcisolver = HEA.as_pyscf_solver(n_layers=4)
++        mf = qmmm.mm_charge(casci, current_MM_coords, MMcharges, unit='Ang').run()
++        # mf = qmmm.mm_charge(scf.RHF(mol), current_MM_coords, MMcharges).run()
++        self.grad = mf.nuc_grad_method().kernel()
++        self.energy = mf.e_tot
++        dm = mf.make_rdm1()
++        self.pcgrad = self.force_on_mm(mol, current_MM_coords, MMcharges, dm)
++        
++        return self.energy, self.grad, self.pcgrad
++    
+\ No newline at end of file
+Binary files ash_v0.95_bdf9c89/knarr/KNARRatom/__pycache__/__init__.cpython-39.pyc and ash_mod/knarr/KNARRatom/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRatom/__pycache__/atom.cpython-39.pyc and ash_mod/knarr/KNARRatom/__pycache__/atom.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRatom/__pycache__/path.cpython-39.pyc and ash_mod/knarr/KNARRatom/__pycache__/path.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRatom/__pycache__/utilities.cpython-39.pyc and ash_mod/knarr/KNARRatom/__pycache__/utilities.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/__init__.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/asepot.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/asepot.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/bobdebug.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/bobdebug.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/calculator.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/calculator.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/cuh2.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/cuh2.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/debug.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/debug.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/eon.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/eon.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/henkelman.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/henkelman.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/henkelman_gauss.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/henkelman_gauss.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/idpp.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/idpp.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/lennardjones.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/lennardjones.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/lepsho.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/lepsho.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/mb.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/mb.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/morse.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/morse.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/orca.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/orca.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/peaks.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/peaks.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/utilities.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/utilities.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRcalculator/__pycache__/xtb.cpython-39.pyc and ash_mod/knarr/KNARRcalculator/__pycache__/xtb.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRio/__pycache__/__init__.cpython-39.pyc and ash_mod/knarr/KNARRio/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRio/__pycache__/input.cpython-39.pyc and ash_mod/knarr/KNARRio/__pycache__/input.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRio/__pycache__/io.cpython-39.pyc and ash_mod/knarr/KNARRio/__pycache__/io.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRio/__pycache__/output_print.cpython-39.pyc and ash_mod/knarr/KNARRio/__pycache__/output_print.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRio/__pycache__/system_print.cpython-39.pyc and ash_mod/knarr/KNARRio/__pycache__/system_print.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRio/__pycache__/utilities.cpython-39.pyc and ash_mod/knarr/KNARRio/__pycache__/utilities.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRjobs/__pycache__/RMSD.cpython-39.pyc and ash_mod/knarr/KNARRjobs/__pycache__/RMSD.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRjobs/__pycache__/__init__.cpython-39.pyc and ash_mod/knarr/KNARRjobs/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRjobs/__pycache__/dynamics.cpython-39.pyc and ash_mod/knarr/KNARRjobs/__pycache__/dynamics.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRjobs/__pycache__/freq.cpython-39.pyc and ash_mod/knarr/KNARRjobs/__pycache__/freq.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRjobs/__pycache__/neb.cpython-39.pyc and ash_mod/knarr/KNARRjobs/__pycache__/neb.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRjobs/__pycache__/opt.cpython-39.pyc and ash_mod/knarr/KNARRjobs/__pycache__/opt.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRjobs/__pycache__/path.cpython-39.pyc and ash_mod/knarr/KNARRjobs/__pycache__/path.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRjobs/__pycache__/point.cpython-39.pyc and ash_mod/knarr/KNARRjobs/__pycache__/point.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRjobs/__pycache__/saddle.cpython-39.pyc and ash_mod/knarr/KNARRjobs/__pycache__/saddle.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRjobs/__pycache__/utilities.cpython-39.pyc and ash_mod/knarr/KNARRjobs/__pycache__/utilities.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRmisc/__pycache__/__init__.cpython-39.pyc and ash_mod/knarr/KNARRmisc/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRmisc/__pycache__/makepes.cpython-39.pyc and ash_mod/knarr/KNARRmisc/__pycache__/makepes.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRmisc/__pycache__/plots.cpython-39.pyc and ash_mod/knarr/KNARRmisc/__pycache__/plots.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRoptimization/__pycache__/__init__.cpython-39.pyc and ash_mod/knarr/KNARRoptimization/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRoptimization/__pycache__/fire.cpython-39.pyc and ash_mod/knarr/KNARRoptimization/__pycache__/fire.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRoptimization/__pycache__/lbfgs.cpython-39.pyc and ash_mod/knarr/KNARRoptimization/__pycache__/lbfgs.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRoptimization/__pycache__/utilities.cpython-39.pyc and ash_mod/knarr/KNARRoptimization/__pycache__/utilities.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/KNARRoptimization/__pycache__/vpo.cpython-39.pyc and ash_mod/knarr/KNARRoptimization/__pycache__/vpo.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/__pycache__/KNARR.cpython-39.pyc and ash_mod/knarr/__pycache__/KNARR.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/__pycache__/KNARRsettings.cpython-39.pyc and ash_mod/knarr/__pycache__/KNARRsettings.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/knarr/__pycache__/__init__.cpython-39.pyc and ash_mod/knarr/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/__init__.cpython-39.pyc and ash_mod/modules/__pycache__/__init__.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_MM.cpython-39.pyc and ash_mod/modules/__pycache__/module_MM.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_PES_rewrite.cpython-39.pyc and ash_mod/modules/__pycache__/module_PES_rewrite.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_QMMM.cpython-39.pyc and ash_mod/modules/__pycache__/module_QMMM.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_benchmarking.cpython-39.pyc and ash_mod/modules/__pycache__/module_benchmarking.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_coords.cpython-39.pyc and ash_mod/modules/__pycache__/module_coords.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_dualtheory.cpython-39.pyc and ash_mod/modules/__pycache__/module_dualtheory.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_dynamics.cpython-39.pyc and ash_mod/modules/__pycache__/module_dynamics.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_electron_chem.cpython-39.pyc and ash_mod/modules/__pycache__/module_electron_chem.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_freq.cpython-39.pyc and ash_mod/modules/__pycache__/module_freq.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_highlevel_workflows.cpython-39.pyc and ash_mod/modules/__pycache__/module_highlevel_workflows.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_molcrys.cpython-39.pyc and ash_mod/modules/__pycache__/module_molcrys.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_oldhighlevel_workflows.cpython-39.pyc and ash_mod/modules/__pycache__/module_oldhighlevel_workflows.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_plotting.cpython-39.pyc and ash_mod/modules/__pycache__/module_plotting.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_polembed.cpython-39.pyc and ash_mod/modules/__pycache__/module_polembed.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_results.cpython-39.pyc and ash_mod/modules/__pycache__/module_results.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_singlepoint.cpython-39.pyc and ash_mod/modules/__pycache__/module_singlepoint.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_solvation.cpython-39.pyc and ash_mod/modules/__pycache__/module_solvation.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_solvation2.cpython-39.pyc and ash_mod/modules/__pycache__/module_solvation2.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_spinprojection.cpython-39.pyc and ash_mod/modules/__pycache__/module_spinprojection.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_surface.cpython-39.pyc and ash_mod/modules/__pycache__/module_surface.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/modules/__pycache__/module_workflows.cpython-39.pyc and ash_mod/modules/__pycache__/module_workflows.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/__pycache__/test_ORCA.cpython-39.pyc and ash_mod/tests/__pycache__/test_ORCA.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/__pycache__/test_ORCA_grad.cpython-39.pyc and ash_mod/tests/__pycache__/test_ORCA_grad.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/__pycache__/test_QM_MM_openmm.cpython-39.pyc and ash_mod/tests/__pycache__/test_QM_MM_openmm.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/__pycache__/test_charge_mult.cpython-39.pyc and ash_mod/tests/__pycache__/test_charge_mult.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/__pycache__/test_fragment.cpython-39.pyc and ash_mod/tests/__pycache__/test_fragment.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/__pycache__/test_geometric.cpython-39.pyc and ash_mod/tests/__pycache__/test_geometric.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/__pycache__/test_openmm.cpython-39.pyc and ash_mod/tests/__pycache__/test_openmm.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/__pycache__/test_xtb.cpython-39.pyc and ash_mod/tests/__pycache__/test_xtb.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/__pycache__/test_xx.cpython-39.pyc and ash_mod/tests/__pycache__/test_xx.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/11a_psi4QMSP.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/11a_psi4QMSP.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/11c_psi4QMSP_printfile-PAR.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/11c_psi4QMSP_printfile-PAR.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/11d_psi4QMSP_inputfile.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/11d_psi4QMSP_inputfile.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/12a_psi4QMSP_PE.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/12a_psi4QMSP_PE.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/12b_psi4QMSP_PE_PolEmbedTheory.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/12b_psi4QMSP_PE_PolEmbedTheory.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/13a_LJ-2atom-julia.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/13a_LJ-2atom-julia.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/13b_LJ-H2O-MeOH-sigma.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/13b_LJ-H2O-MeOH-sigma.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/13c_LJ-H2O-MeOH-R0.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/13c_LJ-H2O-MeOH-R0.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/13d_QM-MM_LJ-H2O-MeOH-R0.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/13d_QM-MM_LJ-H2O-MeOH-R0.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/14a_pyscfQM.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/14a_pyscfQM.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/14a_pyscfQM_print.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/14a_pyscfQM_print.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/16a_CINEB_knarr-xtb.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/16a_CINEB_knarr-xtb.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/17a_MOLCRYS-xtb-bf3hcn.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/17a_MOLCRYS-xtb-bf3hcn.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/18a_Numfreq-ORCA-1point.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/18a_Numfreq-ORCA-1point.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/19a_OpenMM-Amber-dhfr-parmed.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/19a_OpenMM-Amber-dhfr-parmed.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/19a_OpenMM-Amber-dhfr.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/19a_OpenMM-Amber-dhfr.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/19a_OpenMM-CHARMM-dhfr-parmed.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/19a_OpenMM-CHARMM-dhfr-parmed.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/19a_OpenMM-CHARMM-dhfr.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/19a_OpenMM-CHARMM-dhfr.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/19b_OpenMM-GROMACS-2koc-native.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/19b_OpenMM-GROMACS-2koc-native.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/19b_OpenMM-GROMACS-2koc-parmed.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/19b_OpenMM-GROMACS-2koc-parmed.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/20a_Singlepoint_parallel_list_of_fragmentfiles.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/20a_Singlepoint_parallel_list_of_fragmentfiles.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/20a_Singlepoint_parallel_list_of_fragments.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/20a_Singlepoint_parallel_list_of_fragments.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/4a_xTBQMSP-runmode_inputfile.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/4a_xTBQMSP-runmode_inputfile.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/4b_xTBQMSP-runmode_library.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/4b_xTBQMSP-runmode_library.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/4c_xTBQMSP-runmode_default.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/4c_xTBQMSP-runmode_default.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/5_ORCAOpt-KnarrLBFGS.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/5_ORCAOpt-KnarrLBFGS.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/5b_xTBOpt-KnarrLBFGS.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/5b_xTBOpt-KnarrLBFGS.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/5b_xTBOpt-KnarrLBFGS_Frozen.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/5b_xTBOpt-KnarrLBFGS_Frozen.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/5c_Psi4Opt-KnarrLBFGS-noprint.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/5c_Psi4Opt-KnarrLBFGS-noprint.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/5c_Psi4Opt-KnarrLBFGS.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/5c_Psi4Opt-KnarrLBFGS.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/5d_Pyscf-KnarrLBFGS.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/5d_Pyscf-KnarrLBFGS.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/6b_xTBOpt-PyBerny.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/6b_xTBOpt-PyBerny.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/6c_Psi4Opt-PyBerny.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/6c_Psi4Opt-PyBerny.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/6d_Pyscf4Opt-PyBerny.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/6d_Pyscf4Opt-PyBerny.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/7_ORCAOpt-geomeTRIC.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/7_ORCAOpt-geomeTRIC.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/7b_xTBOpt-geomeTRIC.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/7b_xTBOpt-geomeTRIC.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/7c_Psi4Opt-geomeTRIC.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/7c_Psi4Opt-geomeTRIC.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/7d_PyscfOpt-geomeTRIC.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/7d_PyscfOpt-geomeTRIC.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/8a_QMMM_OPTKNARR_ORCA.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/8a_QMMM_OPTKNARR_ORCA.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/8a_QMMM_SP_ORCA.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/8a_QMMM_SP_ORCA.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/8b_QMMM_SP_xtb.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/8b_QMMM_SP_xtb.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/8c_QMMM_SP_Psi4-missingatomtype.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/8c_QMMM_SP_Psi4-missingatomtype.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/8c_QMMM_SP_Psi4.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/8c_QMMM_SP_Psi4.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/9b_QMMM_OPTKNARR-xtb.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/9b_QMMM_OPTKNARR-xtb.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/9c_QMMM_OPTGEOMETRIC-ORCA.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/9c_QMMM_OPTGEOMETRIC-ORCA.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/ASH-manual-install-example.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/ASH-manual-install-example.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/bondconstraint-novalue.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/bondconstraint-novalue.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/bondconstraint-withvalue.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/bondconstraint-withvalue.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/confsampler-protocol.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/confsampler-protocol.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/outdated.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/outdated.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/thermochemprotocol-haber-opt-freq-dlpnow1.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/thermochemprotocol-haber-opt-freq-dlpnow1.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/workflow-test.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/workflow-test.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/xtb-qm_mm_test_xtb630.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/xtb-qm_mm_test_xtb630.cpython-39.pyc differ
+Binary files ash_v0.95_bdf9c89/tests/unfinished/__pycache__/xtb-qm_mm_test_xtb640.cpython-39.pyc and ash_mod/tests/unfinished/__pycache__/xtb-qm_mm_test_xtb640.cpython-39.pyc differ
